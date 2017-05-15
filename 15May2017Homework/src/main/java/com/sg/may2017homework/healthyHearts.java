@@ -11,7 +11,6 @@ package com.sg.may2017homework;
  */
 
 import java.util.Scanner;
-import java.lang.Number;
 
 public class healthyHearts {
     
@@ -25,8 +24,11 @@ public class healthyHearts {
         
         
         int maxHeartRate = 220 - intAnswer;
-        int endingHRZone = (int)(maxHeartRate*0.85f); //rounds down
-        int startingHRZone = endingHRZone - 50;
+        float tempMaxHeartRate = (float)(maxHeartRate);
+        float tempEndingHRZone = tempMaxHeartRate*0.85f;
+        float tempStartingHRZone = tempMaxHeartRate*0.50f;
+        int endingHRZone = Math.round(tempEndingHRZone);
+        int startingHRZone = Math.round(tempStartingHRZone);
         
         System.out.println("Your maximum heart rate should be "
             + maxHeartRate + " beats per minute");
