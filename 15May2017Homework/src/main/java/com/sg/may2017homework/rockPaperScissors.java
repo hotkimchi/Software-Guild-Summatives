@@ -54,7 +54,7 @@ public class rockPaperScissors {
                 }
                 int randomChoice = rGen.nextInt(3);
                 String player2Answer = validStrAnswers[randomChoice];
-                System.out.println("Computer chose: " + player2Answer);
+                System.out.println("Player 2 chose: " + player2Answer);
 
                 
                 int result = playGame(player1Answer, player2Answer);
@@ -68,7 +68,7 @@ public class rockPaperScissors {
                     ties++;
                 }
                 else {
-                    System.out.println("There was an error: round "+(count -1));
+                    System.out.println("There was an error: round "+(count +1));
                 }
                 count++;
 
