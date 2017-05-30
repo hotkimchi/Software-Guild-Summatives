@@ -1,0 +1,49 @@
+Stocked: 2017-05-30
+Water::10::3.00::
+Sandwich::10::6.49::
+Mystery Ball::10::1.85::
+Chips::10::1.50::
+Candy Bar::10::0.75::
+Soda::10::2.79::
+Water::10::3.00::
+Sandwich::10::6.49::
+Mystery Ball::10::1.85::
+Chips::10::1.50::
+Candy Bar::10::0.75::
+Soda::10::2.79::
+Water::9::3.00::
+Sandwich::10::6.49::
+Mystery Ball::10::1.85::
+Chips::10::1.50::
+Candy Bar::10::0.75::
+Soda::10::2.79::
+Water::10::3.00::
+Sandwich::10::6.49::
+Mystery Ball::10::1.85::
+Chips::10::1.50::
+Candy Bar::10::0.75::
+Soda::10::2.79::
+Water::10::3.00::
+Sandwich::10::6.49::
+Mystery Ball::10::1.85::
+Chips::10::1.50::
+Candy Bar::10::0.75::
+Soda::10::2.79::
+Water::10::3.00::
+Sandwich::10::6.49::
+Mystery Ball::10::1.85::
+Chips::10::1.50::
+Candy Bar::10::0.75::
+Soda::10::2.79::
+Water::10::3.00::
+Sandwich::10::6.49::
+Mystery Ball::10::1.85::
+Chips::10::1.50::
+Candy Bar::10::0.75::
+Soda::10::2.79::
+Water::10::3.00::
+Sandwich::10::6.49::
+Mystery Ball::10::1.85::
+Chips::10::1.50::
+Candy Bar::10::0.75::
+Soda::10::2.79::
