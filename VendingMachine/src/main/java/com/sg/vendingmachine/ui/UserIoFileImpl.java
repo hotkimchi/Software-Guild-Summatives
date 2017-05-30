@@ -123,6 +123,9 @@ public class UserIoFileImpl implements UserIO{
     }
     
     public String isValidInt(String input) {
+        if (input.equals("")){
+            return "-1";
+        }
         for (int i = 0; i < input.length(); i++) {
             Character x = input.charAt(i);
             if (!Character.isDigit(x)) {
@@ -133,6 +136,9 @@ public class UserIoFileImpl implements UserIO{
     }
     
     public String isValidDecimal(String input) {
+        if (input.equals("")){
+            return "-1";
+        }
         for (int i = 0; i < input.length(); i++) {
             Character x = input.charAt(i);
             if (!Character.isDigit(x) || !x.equals('.')) {

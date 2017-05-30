@@ -34,8 +34,8 @@ public class Controller {
         this.service = service;
         this.view = view;
     }
+    
     public void execute() throws VendingMachineDaoPersistenceException {
-        service.stockVendingMachine();
         items = service.getVendingMachineItems();
 
         view.displayWelcome();
@@ -109,16 +109,17 @@ public class Controller {
     public void enterItemSelection() throws 
             VendingMachineDaoPersistenceException{
         BigDecimal total = currency.getTotal();
-        view.displayCurrentTotal(total);
         view.displayMenu(items);
         VendingItem selection = view.getItemSelection(items);
         try {
-            service.getItem(selection, total);
+            selection = service.getItem(selection, total);
+            returnCurrency(selection, total);
         } catch (VendingMachineInventoryValidationException |
             VendingMachineCostValidationException e) {
             view.displayErrorMessage(e.getMessage());
+            returnCurrency(null, currency.getTotal());
         }
-        returnCurrency(selection, total);
+        
         
     }
     
@@ -132,11 +133,12 @@ public class Controller {
         } catch (VendingMachineDaoPersistenceException e) {
             view.displayErrorMessage(e.getMessage());
         }
-        view.displayReturnedChange(changeMap);
+        view.displayReturnedChange(changeMap, item);
     }
     
-    public void validateAdmin() {
-        service.validateAdmin();
+    public void validateAdmin() throws VendingMachineDaoPersistenceException{
+        String password = view.getPassword();
+        service.validateAdmin(password);
     }
     
     public void unknownCommand () {

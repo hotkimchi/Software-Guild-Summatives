@@ -7,7 +7,6 @@ package com.sg.vendingmachine.service;
 
 import com.sg.vendingmachine.dao.VendingMachineDaoPersistenceException;
 import com.sg.vendingmachine.dao.VendingMachineDao;
-import com.sg.vendingmachine.dto.Currency;
 import com.sg.vendingmachine.dto.VendingItem;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,12 +27,7 @@ public class VendingMachineServiceFileImpl implements VendingMachineService {
     }
 
     @Override
-    public void stockVendingMachine() {
-        dao.stockVendingMachine();
-    }
-
-    @Override
-    public List<VendingItem> getVendingMachineItems() {
+    public List<VendingItem> getVendingMachineItems() throws VendingMachineDaoPersistenceException{
         return dao.getVendingMachineItems();
     }
 
@@ -44,14 +38,14 @@ public class VendingMachineServiceFileImpl implements VendingMachineService {
     }
 
     @Override
-    public void getItem(VendingItem item, BigDecimal total) throws
+    public VendingItem getItem(VendingItem item, BigDecimal total) throws
             VendingMachineInventoryValidationException,
             VendingMachineCostValidationException,
             VendingMachineDaoPersistenceException {
 
         validateItem(item);
         validateCost(item, total);
-        dao.getItem(item);
+        return dao.getItem(item);
     }
 
     @Override
@@ -67,6 +61,8 @@ public class VendingMachineServiceFileImpl implements VendingMachineService {
         VendingItem nullItem = new VendingItem();
         if (item == null){
             item = nullItem;
+            item.setName("notInInventory");
+            item.setInventory(0);
             item.setCost("0.00");
         }
         return item;
@@ -81,16 +77,28 @@ public class VendingMachineServiceFileImpl implements VendingMachineService {
     }
 
     @Override
-    public void validateAdmin() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void validateAdmin(String password) throws VendingMachineDaoPersistenceException{
+        if (password.equals("stockItUp123")){
+            dao.stockVendingMachine();
+        } else {
+            throw new VendingMachineDaoPersistenceException(
+                "Password was incorrect!!!");
+        }
     }
 
     private void validateItem(VendingItem item) throws
             VendingMachineInventoryValidationException {
-        int howMany = item.getInventory();
+        int howMany = 0;
+        if (item != null){
+            howMany = item.getInventory();
+        } else {
+            throw new VendingMachineInventoryValidationException(
+                    "There are no items in the vending machine");
+        }
         if (howMany == 0) {
             throw new VendingMachineInventoryValidationException(
                     "The selected item is out of stock");
+            
         }
 
     }

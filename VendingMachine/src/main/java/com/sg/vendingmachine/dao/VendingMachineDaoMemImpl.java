@@ -36,32 +36,30 @@ public class VendingMachineDaoMemImpl implements VendingMachineDao {
     private LocalDate stockDate;
     public static final String COLLECTION_FILE = "vendingstock.txt";
     public static final String DELIMITER = "::";
-    
 
     @Override
-    public void stockVendingMachine() throws VendingMachineDaoPersistenceException{
-        if (itemAndCost.isEmpty()) {
+    public void stockVendingMachine() throws VendingMachineDaoPersistenceException {
+        if (itemAndCost.isEmpty()){
             createMap();
         }
-        
+        items = new ArrayList();
         for (String itemName : itemAndCost.keySet()) {
             VendingItem item = new VendingItem();
             item.setName(itemName);
-            item.setInventory(10);
+            item.setInventory(3);
             item.setCost(itemAndCost.get(itemName));
             items.add(item);
         }
-        if(!COLLECTION_FILE.isEmpty()){
-            loadStock();
-            
-        }
         stockDate = LocalDate.now();
         writeStock();
-
     }
 
     @Override
-    public List<VendingItem> getVendingMachineItems() throws VendingMachineDaoPersistenceException{
+    public List<VendingItem> getVendingMachineItems() throws VendingMachineDaoPersistenceException {
+        loadStock();
+        if(items.size() == 0){
+           stockVendingMachine(); 
+        } 
         return items;
     }
 
@@ -77,14 +75,17 @@ public class VendingMachineDaoMemImpl implements VendingMachineDao {
             throws VendingMachineDaoPersistenceException {
         Map<String, Integer> changeMap = new HashMap();
         BigDecimal zeroSum = new BigDecimal("0.00");
-        total = total.subtract(item.getCost().setScale(2, RoundingMode.HALF_UP));
+        if (total.compareTo(item.getCost()) >= 0) {
+            total = total.subtract(item.getCost().setScale(2, RoundingMode.HALF_UP));
+        }
+        if (changeMap.isEmpty()) {
+            changeMap.put("Quarter", 0);
+            changeMap.put("Dime", 0);
+            changeMap.put("Nickel", 0);
+            changeMap.put("Penny", 0);
+        }
         while (total.compareTo(zeroSum) > 0) {
-            if (changeMap.isEmpty()) {
-                changeMap.put("Quarter", 0);
-                changeMap.put("Dime", 0);
-                changeMap.put("Nickel", 0);
-                changeMap.put("Penny", 0);
-            }
+
             if (total.setScale(2, RoundingMode.HALF_UP).compareTo(currency.getQuarter()) >= 0) {
                 int appendValue = changeMap.get("Quarter");
                 appendValue++;
@@ -105,7 +106,7 @@ public class VendingMachineDaoMemImpl implements VendingMachineDao {
                 appendValue++;
                 changeMap.put("Penny", appendValue);
                 total = total.subtract(currency.getPenny().setScale(2, RoundingMode.HALF_UP));
-            } else if (total.setScale(2, RoundingMode.HALF_UP).compareTo(zeroSum) < 0){
+            } else if (total.setScale(2, RoundingMode.HALF_UP).compareTo(zeroSum) < 0) {
                 throw new VendingMachineDaoPersistenceException("ERROR: "
                         + "Change was miscalculated");
             }
@@ -114,12 +115,12 @@ public class VendingMachineDaoMemImpl implements VendingMachineDao {
     }
 
     @Override
-    public void getItem(VendingItem item) throws VendingMachineDaoPersistenceException{
-        loadStock();
+    public VendingItem getItem(VendingItem item) throws VendingMachineDaoPersistenceException {
         int inventoryTotal = item.getInventory();
         int newTotal = inventoryTotal - 1;
         item.setInventory(newTotal);
         writeStock();
+        return item;
     }
 
     private void createMap() {
@@ -130,55 +131,60 @@ public class VendingMachineDaoMemImpl implements VendingMachineDao {
         itemAndCost.put("Mystery Ball", "1.85");
         itemAndCost.put("Sandwich", "6.49");
     }
-    
+
     private void loadStock() throws VendingMachineDaoPersistenceException {
         Scanner myScanner;
-        
+
         try {
             myScanner = new Scanner(new BufferedReader(
-                new FileReader(COLLECTION_FILE)));
+                    new FileReader(COLLECTION_FILE)));
         } catch (FileNotFoundException e) {
             throw new VendingMachineDaoPersistenceException("-_- Could not load stock "
-            +"data into memory.", e);
+                    + "data into memory.", e);
         }
-        
+
         String currentLine;
         String[] currentToken;
-        
+        int count = 0;
         while (myScanner.hasNextLine()) {
             currentLine = myScanner.nextLine();
             currentToken = currentLine.split(DELIMITER);
             VendingItem currentItem = new VendingItem();
-            if (!currentLine.startsWith("Stocked: ")){
+            if (currentLine.startsWith("Stocked")){
+                stockDate = LocalDate.parse(currentToken[1]);
+            }
+            if (!currentLine.startsWith("Stocked")) {
                 currentItem.setName(currentToken[0]);
                 int inventoryStock = Integer.parseInt(currentToken[1]);
                 currentItem.setInventory(inventoryStock);
                 currentItem.setCost(currentToken[2]);
-
-                items.add(currentItem);
-            }
+                items.add(currentItem);   
+            } 
         }
         myScanner.close();
     }
-    
+
     private void writeStock() throws VendingMachineDaoPersistenceException {
         PrintWriter out;
-        
+
         try {
             out = new PrintWriter(new FileWriter(COLLECTION_FILE));
         } catch (IOException e) {
             throw new VendingMachineDaoPersistenceException("Could not save stock data.", e);
         }
-        
+
         List<VendingItem> itemList = getVendingMachineItems();
-        out.println("Stocked: " + stockDate);
+        
+        out.println("Stocked" + DELIMITER + stockDate);
+        
         for (VendingItem i : itemList) {
-            out.println(i.getName()+ DELIMITER + i.getInventory()
-            + DELIMITER + i.getCost()+ DELIMITER);
-            
+            out.println(i.getName() + DELIMITER + i.getInventory()
+                    + DELIMITER + i.getCost());
+
             out.flush();
         }
         out.close();
     }
+
 
 }

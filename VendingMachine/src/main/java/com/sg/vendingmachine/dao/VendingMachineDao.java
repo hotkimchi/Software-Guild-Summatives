@@ -21,5 +21,5 @@ public interface VendingMachineDao {
     BigDecimal addToTotal(BigDecimal amount);
     Map<String, Integer> getChange(VendingItem item, BigDecimal total) throws
             VendingMachineDaoPersistenceException;
-    void getItem(VendingItem item) throws VendingMachineDaoPersistenceException;
+    VendingItem getItem(VendingItem item) throws VendingMachineDaoPersistenceException;
 }

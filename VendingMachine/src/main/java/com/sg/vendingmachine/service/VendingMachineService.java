@@ -17,16 +17,15 @@ import java.util.Map;
  */
 public interface VendingMachineService {
     
-    void stockVendingMachine();
-    List<VendingItem> getVendingMachineItems();
+    List<VendingItem> getVendingMachineItems() throws VendingMachineDaoPersistenceException;
     BigDecimal addToTotal(BigDecimal amount);
-    void getItem(VendingItem item, BigDecimal total) throws
+    VendingItem getItem(VendingItem item, BigDecimal total) throws
             VendingMachineInventoryValidationException,
             VendingMachineCostValidationException,
             VendingMachineDaoPersistenceException;
     Map<String,Integer> getChange(VendingItem item, BigDecimal total) throws
             VendingMachineDaoPersistenceException;
-    void validateAdmin();
+    void validateAdmin(String passowrd)throws VendingMachineDaoPersistenceException;
     VendingItem checkItem(VendingItem item);
     BigDecimal checkTotal(BigDecimal total);
     
