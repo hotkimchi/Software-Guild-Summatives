@@ -1,0 +1,15 @@
+2017-06-02T13:00:25.132 : getItem: Item Name: Waternull
+2017-06-02T13:04:10.917 : getItem: Item Name: Water | Inventory: 2 | Cost: 3.00null
+2017-06-02T13:09:24.879 : getItem: Item Name: Water null
+2017-06-02T14:45:22.453 : getItem: Item Name: Water null
+2017-06-02T14:59:30.791 : getItem: Item Name: Water null
+2017-06-02T15:13:58.115 : getItem: Item Name: Water null
+2017-06-02T15:40:18.693 : getItem: Item Name: Water null
+2017-06-02T16:48:09.009 : getItem: Item Name: Water 0.50
+2017-06-02T18:10:37.185 : getItem: Item Name: Water nullNot enough money was deposited for selected item
+2017-06-05T08:16:44.802 : getItem: Item Name: Soda 0.50Not enough money was deposited for selected item
+2017-06-05T08:20:49.725 : getItem: Item Name: Mystery Ball 1.25com.sg.vendingmachine.service.VendingMachineCostValidationException: Not enough money was deposited for selected item
+2017-06-05T09:37:31.782 : getItem: Item Name: Mystery Ball 1.25 Not enough money was deposited for selected item
+2017-06-05T09:58:55.046 : getItem: Item Name: Water 10.00 The selected item is out of stock
+2017-06-05T14:02:08.896 : getItem: Item Name: Water 10.25 com.sg.vendingmachine.service.VendingMachineInventoryValidationException: The selected item is out of stock
+2017-06-05T14:03:04.049 : getItem: Item Name: Sandwich 1.00 com.sg.vendingmachine.service.VendingMachineCostValidationException: Not enough money was deposited for selected item
