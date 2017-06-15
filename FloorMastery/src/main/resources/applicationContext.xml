@@ -36,7 +36,7 @@
     
     <bean id="service" class="com.sg.floormastery.service.ServiceImpl">
         <constructor-arg ref="dao"/>
-        <constructor-arg type="java.lang.String" value="training"/>
+        <constructor-arg type="java.lang.String" value="production"/>
     </bean>
     
     <bean id="controller" class="com.sg.floormastery.controller.Controller">

@@ -34,7 +34,7 @@ public class DaoFileImpl implements FloorMasteryDao {
     private List<Order> memOrders = new ArrayList();
     private List<Order> loadOrders = new ArrayList();
     private Map<LocalDate, List<Order>> editedOrders = new HashMap();
-    private int currentOrderCount = 1;
+    private int currentOrderCount = 0;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMdduuuu");
     private Map<String, BigDecimal> taxMap = new HashMap();
     private StateAndTaxDao taxDao;
@@ -142,10 +142,13 @@ public class DaoFileImpl implements FloorMasteryDao {
             }
 
             String currentLine;
+            String[] currentToken;
             while (myScanner.hasNextLine()) {
                 currentLine = myScanner.nextLine();
+                currentToken = currentLine.split(DELIMITER);
                 if (!currentLine.startsWith("Orders")) {
-                    currentOrderCount++;
+                    int count = Integer.parseInt(currentToken[0]);
+                    currentOrderCount = count;
                 }
             }
             myScanner.close();
@@ -162,6 +165,7 @@ public class DaoFileImpl implements FloorMasteryDao {
             out.println("Orders for" + DELIMITER + currentDate);
         }
         for (Order order : memOrders) {
+            currentOrderCount++;
             order.setOrderNumber(currentOrderCount);
             out.println(order.getOrderNumber() + DELIMITER
                     + order.getCustomerName() + DELIMITER
@@ -177,10 +181,9 @@ public class DaoFileImpl implements FloorMasteryDao {
                     + order.getTotal());
 
             out.flush();
-            currentOrderCount++;
         }
         out.close();
-        currentOrderCount = 1;
+        currentOrderCount = 0;
         memOrders.clear();
     }
 
@@ -199,7 +202,7 @@ public class DaoFileImpl implements FloorMasteryDao {
                 out.println("Orders for" + DELIMITER + date);
                 List<Order> orders = editedOrders.get(date);
                 for (Order order : orders) {
-                    order.setOrderNumber(currentOrderCount);
+                    order.setOrderNumber(order.getOrderNumber());
                     out.println(order.getOrderNumber() + DELIMITER
                             + order.getCustomerName() + DELIMITER
                             + order.getState() + DELIMITER
@@ -286,9 +289,10 @@ public class DaoFileImpl implements FloorMasteryDao {
 
     @Override
     public Order editOrder(LocalDate orderDate, Order order) {
+        int x = loadOrders.indexOf(order);
         order = getTaxAndCosts(order);
         order = doMath(order);
-        loadOrders.set(order.getOrderNumber() - 1, order);
+        loadOrders.set(x, order);
         if (editedOrders.isEmpty()) {
             editedOrders.put(orderDate, loadOrders);
         } else {

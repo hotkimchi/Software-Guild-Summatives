@@ -103,8 +103,8 @@ public class View {
         String stateOrder = states.get(stateChoice - 1);
 
         io.print("Here are the products we work with:");
-        for (int i = 0; i < states.size(); i++) {
-            io.print((i + 1) + ". " + states.get(i));
+        for (int i = 0; i < products.size(); i++) {
+            io.print((i + 1) + ". " + products.get(i));
         }
         int productChoice = io.readInt("What is the product type?", 1, products.size());
         String productOrder = products.get(productChoice - 1);
@@ -159,7 +159,9 @@ public class View {
     public void displayOrdersByDate(List<Order> orders, LocalDate date) {
         io.print("Here are the orders for " + date + ": ");
         io.print("*************************************");
+        int count = 1;
         for (Order order : orders) {
+            io.print("Selection: " + count);
             io.print(order.getOrderNumber() + ", "
                     + order.getCustomerName() + ", "
                     + order.getState() + ", "
@@ -172,6 +174,7 @@ public class View {
                     + order.getLaborCost() + ", "
                     + order.getTotalTax() + ", "
                     + order.getTotal());
+            count++;
         }
         io.print("**************************************");
     }
